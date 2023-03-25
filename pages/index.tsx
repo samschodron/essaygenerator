@@ -18,8 +18,16 @@ export default function Home() {
       </Head>
       <div>
         <button onClick={async ()=>{
-          const generatedText = await fetch("http://localhost:3000/api/generateText")
-          const json = await generatedText.json()
+          const body = {text: "Write a 200-250 word essay about a personal experience in an untraditional learning space."}
+          const generateText = await fetch("http://localhost:3000/api/generateText", {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+              "Content-Type": "application/json",
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+          })
+          const json = await generateText.json()
           console.log(json)
           setText(json.response)
         }}>
