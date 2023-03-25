@@ -4,11 +4,11 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-const generateText = async ()=>{
+const generateText = async (text: string)=>{
     try {
         const generatedText = await openai.createCompletion({
             model: "text-davinci-003",
-            prompt: "Write a 200-250 word essay about a personal experience in an untraditional learning space.",
+            prompt: text,
             temperature: 0.7,
             max_tokens: 500,
             top_p: 1,
@@ -37,7 +37,11 @@ export default async function handler(
     return res.status(304).json({response: "Not a POST call"})
   }
   else {
-    const response = await generateText() as string
+    if(!req.body || !req.body.text) {
+      res.status(400).json({response: "No body input."})
+    }
+    const text = req.body.text
+    const response = await generateText(text) as string
     return res.status(200).json({ response })
   } 
 }
