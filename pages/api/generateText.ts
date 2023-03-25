@@ -33,6 +33,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const response = await generateText() as string
-  res.status(200).json({ response })
+  if (req.method !== 'POST') {
+    return res.status(304).json({response: "Not a POST call"})
+  }
+  else {
+    const response = await generateText() as string
+    return res.status(200).json({ response })
+  } 
 }
